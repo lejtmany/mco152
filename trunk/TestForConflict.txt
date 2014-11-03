@@ -1,10 +1,5 @@
-<<<<<<< .mine
 Dr Robinson
-Michael Davidson=======
-Dr Robinson
+Michael Davidson
 Yisrael Nechamkin
-<<<<<<< .mine
-Nahum Twersky>>>>>>> .r16
-=======
 Nahum Twersky
-BOB>>>>>>> .r19
+BOB
