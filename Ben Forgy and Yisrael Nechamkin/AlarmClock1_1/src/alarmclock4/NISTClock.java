@@ -7,7 +7,6 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.InetAddress;
 import java.util.Calendar;
-import java.util.Collection;
 import java.util.Iterator;
 import java.util.Properties;
 import java.util.logging.Level;
@@ -17,13 +16,13 @@ import org.apache.commons.net.ntp.NtpV3Packet;
 import org.apache.commons.net.ntp.TimeInfo;
 
 public class NISTClock implements IClock {
-
+    
     private final Properties properties;
     private final String fileName;
     private int index;
     private long lastQuery = System.currentTimeMillis();
     private ITime lastTime = null;
-
+    
     public NISTClock(String[] urls, String fileName) throws IOException {
         this.fileName = fileName;
         properties = new Properties();
@@ -33,19 +32,19 @@ public class NISTClock implements IClock {
         OutputStream out = new FileOutputStream(fileName);
         properties.storeToXML(out, null);
     }
-
+    
     public NISTClock(String fileName) throws IOException {
         this.fileName = fileName;
         properties = new Properties();
         InputStream in = new FileInputStream(fileName);
         properties.loadFromXML(in);
     }
-
+    
     public void addUrl(String url) throws IOException {
         properties.setProperty("url" + properties.size(), url);
         properties.storeToXML(new FileOutputStream(fileName), null);
     }
-
+    
     @Override
     public ITime getTime() {
         int difference = (int) (System.currentTimeMillis() - lastQuery);
@@ -64,7 +63,7 @@ public class NISTClock implements IClock {
                 retrievedTime = true;
             } catch (IOException ex) {
                 if (!it.hasNext()) {
-                    throw new RuntimeException(ex);
+                    throw new UnableToConnectException(ex);
                 }
                 Logger.getLogger(NISTClock.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -79,9 +78,11 @@ public class NISTClock implements IClock {
         lastQuery = System.currentTimeMillis();
         return lastTime;
     }
+    
+    public class UnableToConnectException extends RuntimeException {
 
-    /*   private String getUrl() {
-     String name = properties.getProperty("url" + index);
-     index = (index + 1) % 5;
-     return properties.values();*/
+        UnableToConnectException(Throwable t) {
+            super(t);
+        }
+    }
 }

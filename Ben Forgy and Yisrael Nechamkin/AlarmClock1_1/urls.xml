@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
 <properties>
+<entry key="url4">nist1-lnk.binary.net</entry>
+<entry key="url3">wolfnisttime.com</entry>
+<entry key="url2">nist1-macon.macon.ga.us</entry>
+<entry key="url1">time-c.nist.gov</entry>
 <entry key="url0">nist1-pa.ustiming.org</entry>
 </properties>

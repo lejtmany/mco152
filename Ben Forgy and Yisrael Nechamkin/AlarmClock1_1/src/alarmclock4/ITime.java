@@ -23,9 +23,11 @@ public interface ITime {
     public int compareTo(ITime other);
 
     public default ITime addSeconds(int i) {
-        setHour((getHour() + i / 3600) % 24);
-        setMinute((getMinute() + i / 60) % 60);
-        setSecond((getSecond() + i) % 60);
+        int seconds = i + getSecond();
+        int minutes = seconds /60 + getMinute();
+        setHour((getHour() + minutes / 60) % 24);
+        setMinute(minutes % 60);
+        setSecond(seconds % 60);
         return this;
     }
 }
