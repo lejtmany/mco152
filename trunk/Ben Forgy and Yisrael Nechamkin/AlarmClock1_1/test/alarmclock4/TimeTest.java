@@ -107,8 +107,13 @@ public class TimeTest {
     }
 
     @Test
-    public void testAddSeconds_overflow() {
+    public void testAddSeconds_paramOverflow() {
         int orig = timeRandom.getTimeInSeconds();
         assertEquals(timeRandom.addSeconds(3600).getTimeInSeconds(), orig + 3600);
+    }
+    
+    @Test
+    public void testAddSeconds_stateOverflow() {
+        assertEquals(time235959.addSeconds(2).getTimeInSeconds(), 1);
     }
 }
