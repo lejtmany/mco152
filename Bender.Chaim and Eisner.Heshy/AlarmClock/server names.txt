@@ -1,0 +1,9 @@
+#comments
+#server URL found at http://tf.nist.gov/tf-cgi/servers.cgi
+#no spaces around = sign
+fakeserver=wrong.server.net
+server1=time.nist.gov
+server2=nist1-ny.ustiming.org
+server3=time-c.nist.gov
+server4=wolfnisttime.com
+server5=ntp-nist.ldsbc.edu
