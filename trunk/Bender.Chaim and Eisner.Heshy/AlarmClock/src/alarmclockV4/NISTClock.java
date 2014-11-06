@@ -5,6 +5,8 @@
  */
 package alarmclockV4;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
@@ -23,25 +25,32 @@ import org.apache.commons.net.ntp.TimeInfo;
  */
 public class NISTClock implements IClock {
 
-        // List of time servers: http://tf.nist.gov/tf-cgi/servers.cgi
+    // List of time servers: http://tf.nist.gov/tf-cgi/servers.cgi
     // Do not query time server more than once every 4 seconds
     public static final String[] TIME_SERVERS = {"time.nist.gov", "nist1-ny.ustiming.org",
         "time-c.nist.gov", "wolfnisttime.com", "ntp-nist.ldsbc.edu"};
     int currentServerIndex = 0;
     boolean serverReached = false;
+    Properties serverProperty = new Properties();
+
+    public NISTClock() throws FileNotFoundException, IOException {
+        serverProperty.load(new FileInputStream("server names.txt"));
+    }
 
     /**
-    *if returned Time is null servers were unreachable
-    *or IO exception was thrown
-    */
+     * if returned Time is null servers were unreachable or IO exception was
+     * thrown
+     *
+     * @return local time
+     */
     @Override
     public Time getTime() {
         Time toReturn = null;
         NTPUDPClient timeClient = new NTPUDPClient();
         InetAddress inetAddress;
-        while (serverReached == false) {
+        for (Object URL : serverProperty.keySet()) {
             try {
-                inetAddress = InetAddress.getByName(TIME_SERVERS[currentServerIndex]);
+                inetAddress = InetAddress.getByName(serverProperty.getProperty((String) URL));
                 TimeInfo timeInfo = timeClient.getTime(inetAddress);
                 NtpV3Packet message = timeInfo.getMessage();
                 long serverTime = message.getTransmitTimeStamp().getTime();
@@ -49,17 +58,12 @@ public class NISTClock implements IClock {
                 Calendar cal = Calendar.getInstance();
                 cal.setTime(time);
                 toReturn = new Time(cal.get(Calendar.HOUR_OF_DAY), cal.get(Calendar.MINUTE), cal.get(Calendar.SECOND));
-                serverReached = true;
+                return toReturn;
+
             } catch (UnknownHostException ex) {
-                if (currentServerIndex < 4) {
-                    currentServerIndex++;
-                } else {
                     Logger.getLogger(NISTClock.class.getName()).log(Level.SEVERE, null, ex);
-                    serverReached = true;
-                }
             } catch (IOException ex) {
                 Logger.getLogger(NISTClock.class.getName()).log(Level.SEVERE, null, ex);
-               serverReached = true;
             }
         }
         return toReturn;

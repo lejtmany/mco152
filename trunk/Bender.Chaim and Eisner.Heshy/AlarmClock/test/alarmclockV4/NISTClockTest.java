@@ -5,6 +5,9 @@
  */
 package alarmclockV4;
 
+import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.*;
@@ -21,14 +24,18 @@ public class NISTClockTest implements ICLockTest {
     @Before
     @Override
     public void setUp() {
-        NISTClock = new NISTClock();
+        try {
+            NISTClock = new NISTClock();
+        } catch (IOException ex) {
+            Logger.getLogger(NISTClockTest.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     @Test
     @Override
     public void compareTime() {
         InternationalClock NyTime = new InternationalClock("America/New_York");
-        assertThat(NyTime.getTime()).isEqualTo(NISTClock.getTime());
+        assertThat(NyTime.getTime().getTotalSeconds() -(NISTClock.getTime().getTotalSeconds())).isLessThanOrEqualTo(5);
     }
 
 }
