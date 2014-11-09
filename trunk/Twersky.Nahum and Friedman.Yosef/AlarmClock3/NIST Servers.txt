@@ -1,0 +1,8 @@
+#Properties Test
+#Tue Nov 04 23:55:46 EST 2014
+server1 = nist1-pa.ustiming.org
+server2 = time-c.nist.gov
+server3 = nist1-macon.macon.ga.us
+server4 = wolfnisttime.com
+server5 = nist.expertsmi.com
+
